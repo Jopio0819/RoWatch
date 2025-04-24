@@ -32,10 +32,10 @@ local function enableShadowMode(player)
 end
 
 -- Helper: fallback + GUI + shadowmode
-local function setupSpectate(player)
+function setupSpectate(player)
 	local joinData = player:GetJoinData()
 	local teleportData = joinData and joinData.TeleportData
-	local targetUserId = targetID or tonumber(teleportData)
+	local targetUserId = tonumber(teleportData)
 
 	if not targetUserId then
 		local fallbackKey = "TeleportData_" .. tostring(player.UserId)
@@ -73,6 +73,12 @@ local function setupSpectate(player)
 		local textLabel = frame:FindFirstChild(tostring(i))
 		if textLabel and textLabel:IsA('TextLabel') then
 			textLabel.Text = v
+		end
+	end
+	for i,v in ipairs(script:WaitForChild('Plugins'):GetChildren()) do
+		local required = require(v)
+		if required then
+			required.ModJoined(player)
 		end
 	end
 	gui.Enabled = true
@@ -145,8 +151,27 @@ NotifyEvent.OnServerEvent:Connect(function(player, action, targetUserId)
 	if action == "Punish" then
 		print("[MOD ACTION]", player.Name, "punished", targetUserId)
 		require(game.ReplicatedStorage:WaitForChild('Config')).PunishmentCode(game.Players:GetPlayerByUserId(targetUserId),player)
+		for i,v in ipairs(script:WaitForChild('Plugins'):GetChildren()) do
+			local required = require(v)
+			if required then
+				required.Punished(targetUserId,player)
+			end
+		end
 	elseif action == "Innocent" then
 		print("[MOD ACTION]", player.Name, "cleared", targetUserId)
+		for i,v in ipairs(script:WaitForChild('Plugins'):GetChildren()) do
+			local required = require(v)
+			if required then
+				required.Innocent(targetUserId,player)
+			end
+		end
+	elseif action == 'Skipped' then
+		for i,v in ipairs(script:WaitForChild('Plugins'):GetChildren()) do
+			local required = require(v)
+			if required then
+				required.Skipped(targetUserId,player)
+			end
+		end
 	end
 	local frame = player.PlayerGui:WaitForChild('SpectateHacker'):WaitForChild('Frame')
 	frame:WaitForChild('Innocent').Visible = false
