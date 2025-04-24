@@ -15,7 +15,7 @@ Add systems such as autoreporting when anticheat detects them cheating, or allow
 [Second Game(s)](https://create.roblox.com/store/asset/127047299527394/Report-System-Second-Game)
 
 **Screenshots**
-![Schermafbeelding 2025-04-23 210528|690x131](upload://pwz7WgEHX05aNMxNsQK8QoJKd7X.png)
+![Schermafbeelding 2025-04-23 210528](https://github.com/user-attachments/assets/e135b287-e148-4a70-9be8-091ed55b79f3)
 
 
 
